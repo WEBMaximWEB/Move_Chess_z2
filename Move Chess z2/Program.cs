@@ -7,7 +7,8 @@ namespace ChessMove
     {
         static void Main(string[] args)
         {
-            string[,] array = {
+            string[,] array =
+            {
                 { "A1", "B1", "C1", "D1", "E1", "F1", "G1", "H1"},
                 { "A2", "B2", "C2", "D2", "E2", "F2", "G2", "H2"},
                 { "A3", "B3", "C3", "D3", "E3", "F3", "G3", "H3"},
@@ -19,34 +20,44 @@ namespace ChessMove
             };
 
             string SPosition, EPosition, buchstabe, buchstabe1;
-            int Zahl, Zahl1;
+            int zahl, zahl1;
 
             Console.Write("Начальное ");
             SPosition = Check();
             //деление на число и букву
-            Zahl = int.Parse(SPosition.Substring(1));
+            zahl = int.Parse(SPosition.Substring(1));
             buchstabe = SPosition.Substring(0, 1).ToUpper();
 
-            CheckN(Zahl);
-            CheckB(buchstabe);
+            // проверка правильности буквы и числа
+            while (CheckN(zahl) || CheckB(buchstabe)) 
+            {
+                SPosition = Check();
+                zahl = int.Parse(SPosition.Substring(1));
+                buchstabe = SPosition.Substring(0, 1).ToUpper();
+            }
+            
             // конвертирование
-            SPosition = buchstabe + Zahl;
+            SPosition = buchstabe + zahl;
             int[] StartPosition = Coordination(array, SPosition);
-
 
             // Конечная позиция
             Console.Write("Конечное ");
             EPosition = Check();
-            Zahl1 = int.Parse(EPosition.Substring(1));
+            zahl1 = int.Parse(EPosition.Substring(1));
             buchstabe1 = EPosition.Substring(0, 1).ToUpper();
 
-            CheckN(Zahl1);
-            CheckB(buchstabe1);
+            while (CheckN(zahl1) || CheckB(buchstabe1))
+            {
+                EPosition = Check();
+                zahl1 = int.Parse(EPosition.Substring(1));
+                buchstabe1 = EPosition.Substring(0, 1).ToUpper();
+            }
+
             // конвертирование
-            EPosition = buchstabe1 + Zahl1;
+            EPosition = buchstabe1 + zahl1;
             int[] EndPosition = Coordination(array, EPosition);
 
-
+            // ввод фигуры и ее проверка
             Console.Write("Напишите стандартное обозначение фигуры, которую собируетесь проверить");
             string piece = Console.ReadLine();
 
@@ -69,15 +80,15 @@ namespace ChessMove
         public static string Check()
         {
             Console.Write("положение фигуры:");
-            string SPosition;
-            SPosition = Console.ReadLine();
-            if (SPosition.Length != 2)
+            string Position;
+            Position = Console.ReadLine();
+            if (Position.Length != 2)
             {
-                Console.WriteLine("Вы явно допустили ошибку");
-                Check();
+                Console.WriteLine("Вы явно допустили ошибку. Попробуйте еще раз.");
+                Position = Check();
             }
 
-            return SPosition;
+            return Position;
         }
 
 
@@ -98,9 +109,9 @@ namespace ChessMove
             return a;
         }
 
-        public static void CheckN(int Zahl)
+        // проверка числа
+        public static bool CheckN(int Zahl)
         {
-            // проверка числа
             bool T = false;
             int[] numbers = new int[] { 1, 2, 3, 4, 5, 6, 7, 8 };
             foreach (int i in numbers)
@@ -109,10 +120,16 @@ namespace ChessMove
                     T = true;
             }
             if (T == false)
+            {
                 Console.WriteLine("У вас ошибка при вводе строки поля");
+                return true;
+            }
+            else
+                return false;
+                
         }
 
-        public static void CheckB(string buchstabe)
+        public static bool CheckB(string buchstabe)
         {
             // проверка буквы
             bool T = false;
@@ -123,7 +140,12 @@ namespace ChessMove
                     T = true;
             }
             if (T == false)
+            {
                 Console.WriteLine("У вас ошибка при вводе столбца поля");
+                return true;
+            }
+            else
+                return false;
         }
         public static void Horse(int x, int y, int x1, int y1)
         {
@@ -159,7 +181,8 @@ namespace ChessMove
 
         public static void Queen(int x, int y, int x1, int y1)
         {
-            if ((Math.Abs(x1 - x) == Math.Abs(y1 - y)) || ((Math.Abs(x1 - x) == 0) || (Math.Abs(y1 - y) == 0)))
+            if ((Math.Abs(x1 - x) == Math.Abs(y1 - y)) ||
+               ((Math.Abs(x1 - x) == 0) || (Math.Abs(y1 - y) == 0)))
                 Console.WriteLine("Все ок");
             else
                 Console.WriteLine("Такого хода не существует");
@@ -170,7 +193,7 @@ namespace ChessMove
             if (Math.Abs(x1 - x) == 1 && Math.Abs(y1 - y) == 0)
                 Console.WriteLine("Все ок");
             else
-                Console.WriteLine("Такого хода не существует");
+                Console.WriteLine("Такого хода не существует"); 
         }
     }
 }
