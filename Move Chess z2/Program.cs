@@ -75,6 +75,7 @@ namespace ChessMove
                 Pawn(StartPosition[0], StartPosition[1], EndPosition[0], EndPosition[1]);
             else
                 Console.WriteLine("Вы ввели неправильное значеине");
+            Console.ReadKey();
         }
 
         public static string Check()
